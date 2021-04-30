@@ -1,0 +1,349 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="script.js"></script>
+
+    <style>
+      .box {
+        width: 250px;
+        height: 30px;
+        border: 1px solid #999;
+        font-size: 18px;
+        color: #1c87c9;
+        background-color: #eee;
+        border-radius: 5px;
+        box-shadow: 4px 4px #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="320" height="320"></canvas>
+    <script>
+      function CreateCanvas() {
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.moveTo(0, 0);
+        let k1 = 30;
+        for (let i = 1; i <= 10; i++) {
+         ctx.fillStyle = "black";
+          ctx.lineTo(k1 - 30, 300);
+          ctx.moveTo(k1, 0);
+          ctx.fillText(i, k1 - 2, 310);
+          k1 = k1 + 30;
+        }
+
+        let k = 30;
+
+        for (let i = 1; i <= 10; i++) {
+           ctx.fillStyle = "black";
+          ctx.lineTo(300, k - 30);
+          ctx.moveTo(0, k);
+          ctx.fillText(10 - i, 2, k - 2);
+          k = k + 30;
+        }
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 0); // линия вправо
+        ctx.lineTo(300, 300); // линия вниз
+        ctx.lineTo(0, 300); // линия влево
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 5; //толщина 5px
+        ctx.moveTo(60, 90);
+        ctx.lineTo(240, 240);
+        ctx.stroke();
+        return ctx;
+      }
+
+function CreateCanvasCircle() {
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.moveTo(0, 0);
+        let k1 = 30;
+        for (let i = 1; i <= 10; i++) {
+         ctx.fillStyle = "black";
+          ctx.lineTo(k1 - 30, 300);
+          ctx.moveTo(k1, 0);
+          ctx.fillText(i, k1 - 2, 310);
+          k1 = k1 + 30;
+        }
+
+        let k = 30;
+
+        for (let i = 1; i <= 10; i++) {
+           ctx.fillStyle = "black";
+          ctx.lineTo(300, k - 30);
+          ctx.moveTo(0, k);
+          ctx.fillText(10 - i, 2, k - 2);
+          k = k + 30;
+        }
+        ctx.moveTo(0, 0);
+        ctx.lineTo(300, 0); // линия вправо
+        ctx.lineTo(300, 300); // линия вниз
+        ctx.lineTo(0, 300); // линия влево
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 5; // толщина линии
+        ctx.arc(150,150,90,0,2*Math.PI,true);
+        ctx.stroke();
+        return ctx;
+      }
+
+CreateCanvas();
+
+
+
+      function On_change() {
+         
+        var n = document.getElementById("box").options.selectedIndex;
+        //console.log(n);
+        var val = document.getElementById("box").options[n].value;
+
+        /*Пошаговый алогритм*/
+        if (val == 2) {
+          ctx = CreateCanvas();
+          ctx.beginPath();
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 2; //толщина 5px
+          ctx.moveTo(60, 90);
+          /*ЦДА*/
+          var xStart = 60;
+          var yStart = 90;
+          var yEnd = 240;
+          var xEnd = 240;
+          //var L=Math.max(Math.abs(xEnd-xStart),Math.abs(yEnd-yStart))
+          var Dx = xEnd - xStart;
+          var Dy = yEnd - yStart;
+          var x = xStart;
+          var y = yStart;
+          //console.log(L);
+          //console.log(Dx);
+          //console.log(Dy);
+
+          if (Dx < Dy) {
+            while (y < yEnd) {
+              y = y + 30;
+              x = Math.round(x + Dx / Dy*30);
+              ctx.lineTo(x, y);
+              ctx.moveTo(x, y);
+            }
+          } else {
+            while (x < xEnd) {
+              x = x + 30;
+              y = Math.round(y + Dy / Dx*30);
+              ctx.lineTo(x, y);
+              ctx.moveTo(x, y);
+            }
+          }
+
+          ctx.stroke();
+        }
+
+        /*ЦДА*/
+        if (val == 1) {
+          ctx = CreateCanvas();
+          ctx.beginPath();
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 2; //толщина 5px
+          ctx.moveTo(60, 90);
+          /*Пошаговый алгоритм*/
+          let K = 5 / 6;
+          var b = 40;
+          var len = 180;
+          var x = 60;
+          var y = 0;
+
+          for (let i = 1; i < len; i++) {
+            y = Math.round(K * x + b);
+            x = x + 1;
+            ctx.lineTo(x, y);
+            ctx.moveTo(x, y);
+          }
+        }
+
+           /*!!!Алгоритм Брезенхема(отрезок)*/
+           if (val == 3)
+           {
+             ctx = CreateCanvas();
+             ctx.beginPath();
+             var x1=60;
+             var x2=240;
+             var y1=90;
+             var y2=240;
+             var dx = (x2 - x1 >= 0 ? 30 : -30);
+             var dy = (y2 - y1 >= 0 ? 30 : -30);
+ 
+               var lengthX = Math.abs(x2 - x1);
+              var lengthY = Math.abs(y2 - y1);
+        
+              var length = Math.max(lengthX, lengthY);
+              
+             
+        
+              if (length == 0)
+              {
+                     ctx.rect(x1,y1,30,30);
+                     ctx.fillStyle = "red";
+                     ctx.fill();
+              }
+ 
+              if (lengthY <= lengthX)
+              {
+              // Начальные значения
+             var x = x1;
+             var y = y1;
+             var d = -lengthX;
+ 
+              // Основной цикл
+              length++;
+             while(x<x2)
+             {
+             // ctx.fillStyle = 'rgba(255,10,38,0.1)'; //для линий
+             ctx.fillStyle = "rgba(180,180,180,0.5)";
+                 ctx.strokeStyle = 'rgba(255,10,38,0.2)'
+                  ctx.rect(x,y,30,30);
+                  
+                  ctx.fill();
+                  x += dx;
+                  d += 2 * lengthY;
+                  if (d > 0) {
+                        d -= 2 * lengthX;
+                        y += dy;
+                  }
+                  ctx.moveTo(x,y);
+               }
+               }
+              else
+                {
+                 // Начальные значения
+               var x = x1;
+               var y = y1;
+               var d = - lengthY;
+ 
+                // Основной цикл
+                  length++;
+                  while(y<=y2)
+                  {
+                      //ctx.strokeStyle = 'rgba(255,10,38,0.5)'
+                      ctx.rect(x,y,30,30);
+                      //ctx.fillStyle = "rgba(120,120,120,0.5)";
+                      ctx.fill();
+                      y += dy;
+                      d += 2 * lengthX;
+                        if (d > 0) {
+                          d -= 2 * lengthY;
+                          x += dx;
+                        }
+                        ctx.moveTo(x,y);
+                  }
+                    }
+                ctx.stroke();
+           }
+           /*Алгоритм Бразенхема для окружности*/
+
+           if (val == 4)
+           {
+             ctx = CreateCanvasCircle();
+             ctx.beginPath();
+             var R=90;
+             var X=0;
+             var delta=90-2*R;
+             var error=0;
+             var Y=R;
+              ctx.strokeStyle = 'rgba(255,10,38,0.2)'
+              //ctx.rect(X,Y,30,30);
+              ctx.fillStyle = "rgba(120,120,120,0.2)";
+              ctx.fill();
+              while(Y>=0)
+              {
+                ctx.strokeStyle = 'rgba(255,10,38,0.2)'
+              ctx.rect(150+X,150+Y,-30,30);
+              ctx.rect(150+X,150-Y,-30,30);
+              ctx.rect(150-X,150+Y,30,30);
+              ctx.rect(150-X,150-Y,30,30);
+              ctx.fillStyle = "rgba(120,120,120,0.2)";
+              ctx.fill();
+              error = 2 * (delta + Y) - 30;
+              if ((delta < 0) && (error <= 0))
+              {
+                X=X+30;
+                delta += 2 * X + 30;
+                
+                continue;
+              }
+              if ((delta > 0) && (error > 0))
+              {
+                 Y=Y-30;
+                 delta -= 2 * Y + 30;
+                 continue;
+              }
+              X=X+30;
+              delta += 2 * (X - Y);
+              Y=Y-30;
+              
+              
+
+              }
+
+
+              
+              ctx.strokeStyle = 'rgba(255,10,38,0.5)'
+              ctx.rect(X,Y,-30,-30);
+              ctx.fillStyle = "rgba(120,120,120,0.5)";
+              ctx.fill();
+
+
+
+              
+             ctx.stroke();
+           }
+           if(val==5 || val==7)
+           {
+             ctx=CreateCanvas();
+           }
+           
+            if(val==6)
+            {
+              ctx=CreateCanvasCircle();
+            }
+           
+
+
+
+
+
+
+
+
+
+
+          ctx.stroke();
+        
+      }
+    </script>
+
+    
+    <select class="box" id="box" onchange="On_change()">
+      <option value="1">Пошаговый алгоритм</option>
+      <option value="2">Алгоритм ЦДА</option>
+      <option value="3">Алгоритм Брезенхема(отрезок)</option>
+      <option value="4">Алгоритм Брезенхема(окружность)</option>
+      <option value="6">Окружность</option>
+      <option value="7">Отрезок</option>
+      <option selected value="5">Выполнить</option>
+    </select>
+  </body>
+</html>
